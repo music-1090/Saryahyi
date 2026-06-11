@@ -2,20 +2,26 @@ import os
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, F
-python-dotenv
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from fragment_api_lib.client import FragmentAPIClient
 
-# ====
+# ==================== .env ဖိုင်ကို ဖတ်ရန် နေရာ ====================
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    logging.warning("python-dotenv library မရှိပါ။ Environment variables များကို တိုက်ရိုက်ဖတ်ပါမည်။")
+# =================================================================
+
+# ==== Env မှ တန်ဖိုးများ ဆွဲယူခြင်း ====
 BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN")
 SUPPORT_USERNAME = os.getenv("SUPPORT_USERNAME", "YOUR_SUPPORT_ACC")
 ADMIN_ID = int(os.getenv("ADMIN_ID", "123456789")) 
 
 TON_SEED = os.getenv("TON_SEED", "word1 word2 ... word24")
-
 
 STEL_DT = os.getenv("STEL_DT", "")
 STEL_SSID = os.getenv("STEL_SSID", "")
@@ -24,7 +30,6 @@ STEL_TON_TOKEN = os.getenv("STEL_TON_TOKEN", "")
 
 FRAGMENT_COOKIES = f"stel_dt={STEL_DT}; stel_ssid={STEL_SSID}; stel_token={STEL_TOKEN}; stel_ton_token={STEL_TON_TOKEN}"
 # ============================================================
-
 
 # ငွေလွှဲလက်ခံမည့် အချက်အလက်များ
 PAYMENT_INFO = """
@@ -41,7 +46,7 @@ PAYMENT_INFO = """
 ⚠️ ငွေလွှဲပြီးပါက Screenshot (ဘောင်ချာ) ကို ဒီ Bot ထဲသို့ ပို့ပေးရပါမည်။
 """
 
-# ပက်ကေ့စ်များနှင့် မြန်မာငွေဈေးနှုန်းများ (စိတ်ကြိုက် ပြင်နိုင်ပါသည်)
+# ပက်ကေ့စ်များနှင့် မြန်မာငွေဈေးနှုန်းများ
 STAR_PACKAGES = {
     "50":   {"stars": 50,   "price": 3500},
     "75":   {"stars": 75,   "price": 5200},
@@ -236,9 +241,9 @@ async def prompt_payment(message_or_text, key, order_type, username, state: FSMC
         f"📝 **အော်ဒါအသေးစိတ် အချက်အလက်**\n\n"
         f"📦 ပစ္စည်း: **{item_text}**\n"
         f"👤 လက်ခံမည့်သူ: **@{username}**\n"
-        f"💵 ကျသင့်ငွေ: **{price} MMK**\n\n"
+        f"💵 ကျသင့်ငွေ: **{price:,} MMK**\n\n"
         f"{PAYMENT_INFO}\n"
-        f"⬇️ ငွေလွှဲပြီးပါက အောက်တွင် ဘောင်ချာတင်ပေးပါရန်။"
+        f"⬇️ Ngwe lwe pe p_ ka screenshot tin pay bar run."
     )
 
     if isinstance(message_or_text, Message):
@@ -252,11 +257,10 @@ async def process_screenshot(message: Message, state: FSMContext):
     data = await state.get_data()
     await state.clear()
 
-    # လူကြီးမင်း (Admin) ဆီသို့ အော်ဒါသတင်းလှမ်းပို့ခြင်း
     admin_btn = InlineKeyboardMarkup(inline_keyboard=[
         [
             InlineKeyboardButton(text="✅ အော်ဒါအတည်ပြုမည် (Auto Buy)", callback_data=f"approve_{data['order_type']}_{data['key']}_{data['username']}_{message.from_user.id}"),
-            InlineKeyboardButton(text="❌ ငြင်းပယ်မည်", callback_data=f"reject_{message.from_user.id}")
+            InlineKeyboardButton(text="❌ Nginn_ pal_ m_.", callback_data=f"reject_{message.from_user.id}")
         ]
     ])
 
@@ -273,7 +277,7 @@ async def process_screenshot(message: Message, state: FSMContext):
         parse_mode="Markdown"
     )
 
-    await message.answer("✅ **ဘောင်ချာ ပို့ဆောင်မှု အောင်မြင်ပါသည်။**\n\nလူကြီးမင်း၏ ငွေလွှဲမှုကို စစ်ဆေးပြီး မိနစ်ပိုင်းအတွင်း လုပ်ဆောင်ပေးသွားမည် ဖြစ်ပါသဖြင့် ခေတ္တစောင့်ဆိုင်းပေးပါဗျာ။")
+    await message.answer("✅ **ဘောင်ချာ ပို့ဆောင်မှု အောင်မြင်ပါသည်။**\n\nလူကြီးမင်း၏ Ngwe lwe m_ ko sit say pe.. minit pine atwin lote saung pay twar m_ pyit par th_ phrt khatt saunt sine pay bar byar.")
 
 @dp.message(OrderState.waiting_for_screenshot)
 async def process_not_photo(message: Message):
