@@ -1,3 +1,4 @@
+import os
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, F
@@ -7,10 +8,22 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from fragment_api_lib.client import FragmentAPIClient
 
-# ==================== တည်းဖြတ်ရန် နေရာများ ====================
-BOT_TOKEN = "YOUR_BOT_TOKEN"          # သင့် Telegram Bot Token ထည့်ရန်
-SUPPORT_USERNAME = "myanmar_music_bot2027"  # သင့် Support Account (ဥပမာ - thazin_tzk)
-ADMIN_ID = 8315544720               # သင့်ရဲ့ Telegram User ID (ဒီထဲကို ငွေလွှဲအကြောင်းကြားစာလာမည်)
+# ====
+BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN")
+SUPPORT_USERNAME = os.getenv("SUPPORT_USERNAME", "YOUR_SUPPORT_ACC")
+ADMIN_ID = int(os.getenv("ADMIN_ID", "123456789")) 
+
+TON_SEED = os.getenv("TON_SEED", "word1 word2 ... word24")
+
+
+STEL_DT = os.getenv("STEL_DT", "")
+STEL_SSID = os.getenv("STEL_SSID", "")
+STEL_TOKEN = os.getenv("STEL_TOKEN", "")
+STEL_TON_TOKEN = os.getenv("STEL_TON_TOKEN", "")
+
+FRAGMENT_COOKIES = f"stel_dt={STEL_DT}; stel_ssid={STEL_SSID}; stel_token={STEL_TOKEN}; stel_ton_token={STEL_TON_TOKEN}"
+# ============================================================
+
 
 # ငွေလွှဲလက်ခံမည့် အချက်အလက်များ
 PAYMENT_INFO = """
@@ -26,9 +39,6 @@ PAYMENT_INFO = """
 
 ⚠️ ငွေလွှဲပြီးပါက Screenshot (ဘောင်ချာ) ကို ဒီ Bot ထဲသို့ ပို့ပေးရပါမည်။
 """
-
-TON_SEED = "word1 word2 word3 ... word24"
-FRAGMENT_COOKIES = "stel_ssid=...; stel_dt=...; stel_token=...; stel_ton_token=..."
 
 # ပက်ကေ့စ်များနှင့် မြန်မာငွေဈေးနှုန်းများ (စိတ်ကြိုက် ပြင်နိုင်ပါသည်)
 STAR_PACKAGES = {
