@@ -2,6 +2,7 @@ import os
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, F
+python-dotenv
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
